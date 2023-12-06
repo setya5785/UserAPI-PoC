@@ -47,5 +47,6 @@ This is a simple PoC user API using .Net for test purpose.
 This is quite a barebone API serve as proof of concept for a test. on real development i would change few things.
 - User management should be locked behind authorization. These functions should not be freely accessible by anyone without proper role. I would utilize JWT Token for this.
 - i would use GUID for userid instead of int. this will provide unique id with consistent length and not easily guessed (unlike integer/number)
+- i would not return password information (even though hashed) in user listing. i'd create a seperate model for this.
 - i would seperate user registration and user data update logic and endpoint instead of only using single call
 - i would add some password checking for password creation, so it could be more secure with some rule (ex: minimal length, must contain upper case, lower case, special char, etc.)

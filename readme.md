@@ -50,3 +50,6 @@ This is quite a barebone API serve as proof of concept for a test. on real devel
 - i would not return password information (even though hashed) in user listing. i'd create a seperate model for this.
 - i would seperate user registration and user data update logic and endpoint instead of only using single call
 - i would add some password checking for password creation, so it could be more secure with some rule (ex: minimal length, must contain upper case, lower case, special char, etc.)
+### Preview
+https://github.com/setya5785/UserAPI-PoC/assets/21093449/570e0b18-a130-4f6a-98f3-989df296e902
+

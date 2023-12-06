@@ -46,33 +46,44 @@ namespace UserAPI.Infrastructure
 
         public async Task<(int, string)> SetUserAsync(User model)
         {
-            var userExist = await _dbContext.Users.FirstOrDefaultAsync(c => c.UserId == model.UserId);            
+            var userIdExist = await _dbContext.Users.FirstOrDefaultAsync(c => c.UserId == model.UserId);            
+            var usernameExist = await _dbContext.Users.FirstOrDefaultAsync(c => c.Username == model.Username);            
             var hashedPassword = HashPassword(model.Password);
 
-            if (userExist != null)
+            if (userIdExist != null)
             {
-                userExist.NamaLengkap = model.NamaLengkap;
-                userExist.Username = model.Username;
-                if(!(userExist.Password == hashedPassword))
+                userIdExist.NamaLengkap = model.NamaLengkap;
+                if(usernameExist !=null && userIdExist.UserId != usernameExist.UserId)
                 {
-                    userExist.Password = hashedPassword;
+                    return (0, "Username already taken!");
                 }
-                
-                userExist.Status = model.Status;
+                userIdExist.Username = model.Username;
+                if(!(userIdExist.Password == hashedPassword))
+                {
+                    userIdExist.Password = hashedPassword;
+                }
+
+                userIdExist.Status = model.Status;
 
                 await _dbContext.SaveChangesAsync();
 
                 return (1, "User data updated!");
             }
 
+            if (usernameExist != null)
+            {
+                return (0, "Username already taken!");
+            }
+
             User user = new User
             {
+                NamaLengkap = model.NamaLengkap,
                 Username = model.Username,
                 Password = hashedPassword,
                 Status = model.Status,
             };
 
-            _dbContext.Users.Add(model);
+            _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
 
             return (1, "User created successfully!");
@@ -103,6 +114,7 @@ namespace UserAPI.Infrastructure
                 return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
             }
         }
+
 
     }
 }
